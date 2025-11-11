@@ -68,7 +68,6 @@ When users ask about specific shows, vendors, or safes, use the provided context
         content: msg.content,
       })),
       temperature: 0.7,
-      maxTokens: 1000,
     });
 
     return result.toDataStreamResponse();
@@ -77,4 +76,3 @@ When users ask about specific shows, vendors, or safes, use the provided context
     return new Response('Error processing request', { status: 500 });
   }
 }
-
