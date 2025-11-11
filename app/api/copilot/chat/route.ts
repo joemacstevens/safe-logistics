@@ -70,7 +70,7 @@ When users ask about specific shows, vendors, or safes, use the provided context
       temperature: 0.7,
     });
 
-    return result.toDataStreamResponse();
+    return result.toTextStreamResponse();
   } catch (error) {
     console.error('Error in copilot chat:', error);
     return new Response('Error processing request', { status: 500 });
