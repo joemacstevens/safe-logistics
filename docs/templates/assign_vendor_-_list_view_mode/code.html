@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Assign Vendor - SafeLogistics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#137cec",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101922",
+              "card-light": "#ffffff",
+              "card-dark": "#18232e",
+              "text-primary-light": "#111827",
+              "text-primary-dark": "#ffffff",
+              "text-secondary-light": "#6b7280",
+              "text-secondary-dark": "#9ca3af",
+              "border-light": "#e5e7eb",
+              "border-dark": "#374151"
+            },
+            fontFamily: {
+              "display": ["Manrope", "sans-serif"]
+            },
+            borderRadius: {
+              "DEFAULT": "0.25rem",
+              "lg": "0.5rem",
+              "xl": "0.75rem",
+              "full": "9999px"
+            },
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-primary-light dark:text-text-primary-dark">
+<div class="flex h-auto min-h-screen w-full flex-col">
+<header class="sticky top-0 z-10 w-full bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
+<!-- Top App Bar -->
+<div class="flex items-center p-4 pb-2 justify-between">
+<div class="flex size-10 shrink-0 items-center justify-center">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h1 class="text-lg font-bold flex-1 text-center">Assign Vendor</h1>
+<div class="flex size-10 shrink-0 items-center justify-center"></div>
+</div>
+<!-- Segmented Buttons -->
+<div class="flex px-4 py-3">
+<div class="flex h-10 flex-1 items-center justify-center rounded-lg bg-card-light dark:bg-card-dark p-1 border border-border-light dark:border-border-dark">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-primary has-[:checked]:shadow-sm has-[:checked]:text-white text-text-secondary-light dark:text-text-secondary-dark text-sm font-medium leading-normal">
+<span class="truncate">List View</span>
+<input checked="" class="invisible w-0" name="view-toggle" type="radio" value="List View"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-primary has-[:checked]:shadow-sm has-[:checked]:text-white text-text-secondary-light dark:text-text-secondary-dark text-sm font-medium leading-normal">
+<span class="truncate">Map View</span>
+<input class="invisible w-0" name="view-toggle" type="radio" value="Map View"/>
+</label>
+</div>
+</div>
+<!-- Headline Text -->
+<h2 class="tracking-light text-2xl font-bold leading-tight px-4 text-left pb-2 pt-3">Anaheim Convention Center, Mar 5</h2>
+<!-- Search Bar -->
+<div class="px-4 py-3">
+<label class="flex flex-col min-w-40 h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-full border border-border-light dark:border-border-dark">
+<div class="text-text-secondary-light dark:text-text-secondary-dark flex items-center justify-center pl-4 bg-card-light dark:bg-card-dark rounded-l-xl">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden text-text-primary-light dark:text-text-primary-dark focus:outline-0 focus:ring-0 border-none bg-card-light dark:bg-card-dark h-full placeholder:text-text-secondary-light dark:placeholder:text-text-secondary-dark px-2 text-base font-normal leading-normal" placeholder="Search vendor name or city..." value=""/>
+<button class="flex items-center justify-center px-4 bg-card-light dark:bg-card-dark text-text-secondary-light dark:text-text-secondary-dark rounded-r-xl">
+<span class="material-symbols-outlined">swap_vert</span>
+</button>
+</div>
+</label>
+</div>
+</header>
+<main class="flex-1 px-4 space-y-3 pb-8">
+<!-- List Item -->
+<div class="flex gap-4 bg-card-light dark:bg-card-dark p-4 rounded-xl border border-border-light dark:border-border-dark justify-between">
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-base font-semibold">West Coast Logistics</p>
+<p class="text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark pt-1">Los Angeles, CA</p>
+<p class="text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark">15 mi • 35 min • Capacity: 8/10</p>
+<div class="pt-3">
+<button class="flex w-full sm:w-auto min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary text-white text-sm font-medium leading-normal">
+<span class="truncate">Assign Vendor</span>
+</button>
+</div>
+</div>
+</div>
+<!-- List Item -->
+<div class="flex gap-4 bg-card-light dark:bg-card-dark p-4 rounded-xl border border-border-light dark:border-border-dark justify-between">
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-base font-semibold">SoCal Secure Transit</p>
+<p class="text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark pt-1">Irvine, CA</p>
+<p class="text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark">22 mi • 45 min • Capacity: 10/10</p>
+<div class="pt-3">
+<button class="flex w-full sm:w-auto min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary/20 text-primary text-sm font-medium leading-normal">
+<span class="truncate">Capacity Full</span>
+</button>
+</div>
+</div>
+</div>
+<!-- List Item -->
+<div class="flex gap-4 bg-card-light dark:bg-card-dark p-4 rounded-xl border border-border-light dark:border-border-dark justify-between">
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-base font-semibold">Pacific Express</p>
+<p class="text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark pt-1">San Diego, CA</p>
+<p class="text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark">95 mi • 1 hr 40 min • Capacity: 4/10</p>
+<div class="pt-3">
+<button class="flex w-full sm:w-auto min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary text-white text-sm font-medium leading-normal">
+<span class="truncate">Assign Vendor</span>
+</button>
+</div>
+</div>
+</div>
+<!-- List Item -->
+<div class="flex gap-4 bg-card-light dark:bg-card-dark p-4 rounded-xl border border-border-light dark:border-border-dark justify-between">
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-base font-semibold">Golden State Movers</p>
+<p class="text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark pt-1">Riverside, CA</p>
+<p class="text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark">48 mi • 1 hr 5 min • Capacity: 9/10</p>
+<div class="pt-3">
+<button class="flex w-full sm:w-auto min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary text-white text-sm font-medium leading-normal">
+<span class="truncate">Assign Vendor</span>
+</button>
+</div>
+</div>
+</div>
+<!-- List Item -->
+<div class="flex gap-4 bg-card-light dark:bg-card-dark p-4 rounded-xl border border-border-light dark:border-border-dark justify-between">
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-base font-semibold">Bay Area Logistics Group</p>
+<p class="text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark pt-1">San Francisco, CA</p>
+<p class="text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark">405 mi • 6 hr 30 min • Capacity: 2/10</p>
+<div class="pt-3">
+<button class="flex w-full sm:w-auto min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary text-white text-sm font-medium leading-normal">
+<span class="truncate">Assign Vendor</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Empty State Example -->
+<div class="text-center py-10">
+<span class="material-symbols-outlined text-5xl text-text-secondary-light dark:text-text-secondary-dark opacity-50">search_off</span>
+<p class="mt-4 text-lg font-semibold text-text-primary-light dark:text-text-primary-dark">No Vendors Found</p>
+<p class="mt-1 text-sm text-text-secondary-light dark:text-text-secondary-dark">Try adjusting your search or filter criteria.</p>
+</div>
+</main>
+</div>
+</body></html>

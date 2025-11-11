@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SafeLogistics Copilot</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#137cec",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101922",
+          },
+          fontFamily: {
+            "display": ["Manrope", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-screen w-full flex-col overflow-hidden group/design-root">
+<div class="absolute inset-0 bg-background-light dark:bg-background-dark bg-cover bg-center backdrop-blur-sm" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCnarRMf_SMUgw_k2g0cNhoR8XI0b762WMRqnuh4ToQp3mKTtf2TaLVf-K4dESGiqJgV_n3wZFEW5RYIDCwOsOUtZ10zy8cUQcDO4fSDZ4nIX3hDAw0Ujq5iapMDYIewa3dXQowE0rkDaRkltQG5V4fn_U5bPypNUpS1xWp1BMDCsR2Stji1SMkjaVv2_T707XxWvp1tNn00WSoemlJJKF8osWJwIrjZwW0FC7LpIukIxlToHuPNY7SmY9mFGxPbPzBUhFAQnzbioo');">
+<div class="absolute inset-0 bg-background-dark/60"></div>
+</div>
+<div class="relative flex h-full w-full flex-col justify-end">
+<div class="flex flex-col h-[85vh] max-h-[800px] w-full max-w-3xl mx-auto bg-background-light dark:bg-background-dark rounded-t-xl shadow-2xl">
+<div class="flex h-5 w-full items-center justify-center pt-3 flex-shrink-0">
+<div class="h-1 w-9 rounded-full bg-slate-300 dark:bg-slate-600"></div>
+</div>
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between flex-shrink-0">
+<div class="flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300 text-3xl">smart_toy</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">✨ Copilot</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-transparent text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700">
+<span class="material-symbols-outlined text-2xl">close</span>
+</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto px-4 pt-4 space-y-6">
+<div class="flex items-end gap-3 justify-end">
+<div class="flex flex-1 flex-col gap-1 items-end">
+<p class="text-slate-500 dark:text-slate-400 text-[13px] font-normal leading-normal max-w-[360px] text-right">You</p>
+<p class="text-base font-normal leading-normal flex max-w-[360px] rounded-lg px-4 py-3 bg-primary text-white">Optimize routes for Q4 shows.</p>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 shrink-0" data-alt="User avatar with initials" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA_lsiv8agqH-ubThOKfaZjkxLPMCvc_dnm1RUWB_G5UGc9ekY2RG3wCbes4AdUTfpnEbBZ00muqzWKNPz1XpCNHM0oAh96gVuxbm6mqAXLCc-txNki670A0cB56-1koSyUvd-5kYJoGtsj-dQopkEsQjEaofSDwTVlg5Zj2wkJ1KFaIbldJ2k-4-sJh4vB5LUPwRX4ygCKSKeb5AZ6B_gCwka90oWWr8PfXv80oY-ExNYiwc0KKk_QK5NWihKqJEgMK_DuvHAqyXs");'></div>
+</div>
+<div class="flex items-start gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 shrink-0 bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">smart_toy</span>
+</div>
+<div class="flex flex-1 flex-col gap-2.5 items-start max-w-[calc(100%-48px)]">
+<p class="text-slate-500 dark:text-slate-400 text-[13px] font-normal leading-normal">Copilot</p>
+<div class="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4">
+<p class="text-[11px] font-bold uppercase tracking-widest text-primary mb-3">Routes Optimized</p>
+<div class="grid grid-cols-2 gap-4 mb-4">
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Distance Reduced</p>
+<p class="text-lg font-bold text-slate-900 dark:text-white">1,450 mi</p>
+</div>
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Vendors Updated</p>
+<p class="text-lg font-bold text-slate-900 dark:text-white">3</p>
+</div>
+</div>
+<div class="flex gap-2.5">
+<button class="flex-1 flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-slate-200 dark:hover:bg-slate-600">
+<span class="truncate">View Changes</span>
+</button>
+<button class="flex-1 flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-transparent text-slate-500 dark:text-slate-400 text-sm font-bold leading-normal tracking-[0.015em] hover:bg-slate-100 dark:hover:bg-slate-700">
+<span class="truncate">Undo</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="flex items-end gap-3 justify-end">
+<div class="flex flex-1 flex-col gap-1 items-end">
+<p class="text-slate-500 dark:text-slate-400 text-[13px] font-normal leading-normal max-w-[360px] text-right">You</p>
+<p class="text-base font-normal leading-normal flex max-w-[360px] rounded-lg px-4 py-3 bg-primary text-white">Who is handling the Anaheim show?</p>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 shrink-0" data-alt="User avatar with initials" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA_lsiv8agqH-ubThOKfaZjkxLPMCvc_dnm1RUWB_G5UGc9ekY2RG3wCbes4AdUTfpnEbBZ00muqzWKNPz1XpCNHM0oAh96gVuxbm6mqAXLCc-txNki670A0cB56-1koSyUvd-5kYJoGtsj-dQopkEsQjEaofSDwTVlg5Zj2wkJ1KFaIbldJ2k-4-sJh4vB5LUPwRX4ygCKSKeb5AZ6B_gCwka90oWWr8PfXv80oY-ExNYiwc0KKk_QK5NWihKqJEgMK_DuvHAqyXs");'></div>
+</div>
+<div class="flex items-start gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 shrink-0 bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">smart_toy</span>
+</div>
+<div class="flex flex-1 flex-col gap-2.5 items-start max-w-[calc(100%-48px)]">
+<p class="text-slate-500 dark:text-slate-400 text-[13px] font-normal leading-normal">Copilot</p>
+<p class="text-base font-normal leading-normal flex max-w-[360px] rounded-lg px-4 py-3 bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white">SecureTransport Inc. is assigned. Here's a summary:</p>
+<div class="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4">
+<p class="text-[11px] font-bold uppercase tracking-widest text-primary mb-3">Vendor Summary</p>
+<div class="space-y-3 mb-4">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">SecureTransport Inc.</h3>
+<div class="grid grid-cols-3 gap-2 text-center">
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Shows</p>
+<p class="text-base font-bold text-slate-900 dark:text-white">2</p>
+</div>
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Distance</p>
+<p class="text-base font-bold text-slate-900 dark:text-white">450 mi</p>
+</div>
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400">Capacity</p>
+<p class="text-base font-bold text-slate-900 dark:text-white">85%</p>
+</div>
+</div>
+</div>
+<div class="flex">
+<button class="flex-1 flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-slate-200 dark:hover:bg-slate-600">
+<span class="truncate">View Vendor</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex-shrink-0 bg-background-light dark:bg-background-dark p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<input class="flex-1 h-12 px-4 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 border-transparent focus:border-primary focus:ring-primary" placeholder="✨ Ask a question…" type="text"/>
+<button class="flex items-center justify-center size-12 shrink-0 rounded-lg bg-primary text-white cursor-pointer hover:bg-primary/90">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</body></html>

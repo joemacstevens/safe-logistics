@@ -1,26 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #070f1a;
+  --background-elevated: #0d1726;
+  --card: #101c2c;
+  --card-muted: #0c1623;
+  --foreground: #e2e8f0;
+  --foreground-muted: #93a4bf;
+  --primary: #137fec;
+  --accent-green: #3dd598;
+  --border: rgba(255, 255, 255, 0.08);
+
+  /* Template theme colors */
+  --background-light: #f6f7f8;
+  --background-dark: #101922;
+  --card-light: #FFFFFF;
+  --card-dark: #1A242E;
+  --text-primary-light: #2C3E50;
+  --text-primary-dark: #E2E8F0;
+  --text-secondary-light: #8A94A6;
+  --text-secondary-dark: #9DAAB9;
+  --border-light: #E2E8F0;
+  --border-dark: #3B4754;
+  --status-delivered: #2ECC71;
+  --status-delayed: #F39C12;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --font-display: 'Manrope', sans-serif;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primary: var(--primary);
+  --color-background-light: var(--background-light);
+  --color-background-dark: var(--background-dark);
+  --color-card-light: var(--card-light);
+  --color-card-dark: var(--card-dark);
+  --color-text-primary-light: var(--text-primary-light);
+  --color-text-primary-dark: var(--text-primary-dark);
+  --color-text-secondary-light: var(--text-secondary-light);
+  --color-text-secondary-dark: var(--text-secondary-dark);
+  --color-border-light: var(--border-light);
+  --color-border-dark: var(--border-dark);
+  --color-status-delivered: var(--status-delivered);
+  --color-vendor-teal: rgb(20 184 166);
+  --color-vendor-purple: rgb(168 85 247);
+  --color-vendor-amber: rgb(245 158 11);
 }
 
 body {
-  background: var(--background);
+  min-height: 100vh;
+  background: radial-gradient(circle at 20% 20%, #162943 0%, #070f1a 55%) fixed;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Manrope', sans-serif;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
