@@ -1,8 +1,20 @@
 import { getShowsWithVendors } from '@/lib/supabase/queries';
 import TimelineView from '@/components/timeline/TimelineView';
 import { haversineDistanceWithTime } from '@/lib/utils/distance';
+import { REGION_OPTIONS, stateToRegion } from '@/lib/utils/regions';
 
-export default async function TimelinePage() {
+type RegionFilter = (typeof REGION_OPTIONS)[number] | 'All';
+
+export default async function TimelinePage({
+  searchParams,
+}: {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const resolvedParams = (await searchParams) || {};
+  const regionParam = resolvedParams.region;
+  const selectedRegion = Array.isArray(regionParam)
+    ? regionParam[0]
+    : regionParam;
   const shows = await getShowsWithVendors();
 
   // Calculate gaps between shows
@@ -61,5 +73,24 @@ export default async function TimelinePage() {
     };
   });
 
-  return <TimelineView shows={showsWithGaps} />;
+  const normalizedRegion: RegionFilter = REGION_OPTIONS.includes(
+    selectedRegion as RegionFilter
+  )
+    ? (selectedRegion as RegionFilter)
+    : 'All';
+
+  const regionFilteredShows =
+    normalizedRegion !== 'All'
+      ? showsWithGaps.filter((show) => {
+          const region = stateToRegion(show.state);
+          return region === normalizedRegion;
+        })
+      : showsWithGaps;
+
+  return (
+    <TimelineView
+      shows={regionFilteredShows}
+      selectedRegion={normalizedRegion}
+    />
+  );
 }

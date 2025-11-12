@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { ShowWithVendor } from '@/lib/types';
 import DropdownMenu from '@/components/ui/DropdownMenu';
+import { REGION_OPTIONS } from '@/lib/utils/regions';
 
 interface TimelineViewProps {
   shows: (ShowWithVendor & {
@@ -11,6 +12,7 @@ interface TimelineViewProps {
     time_gap?: number;
     travel_time_minutes?: number;
   })[];
+  selectedRegion?: string | null;
 }
 
 function getVendorColor(vendorId?: string): string {
@@ -79,11 +81,43 @@ function formatTravelTime(minutes?: number): string | null {
   return `${remainingMinutes}m`;
 }
 
-export default function TimelineView({ shows }: TimelineViewProps) {
+export default function TimelineView({ shows, selectedRegion }: TimelineViewProps) {
   const router = useRouter();
+
+  const handleRegionChange = (region: string) => {
+    const query =
+      region === 'All' ? '/timeline' : `/timeline?region=${encodeURIComponent(region)}`;
+    router.push(query);
+  };
 
   return (
     <main className="relative flex-grow bg-background-light dark:bg-background-dark px-4 pb-32 pt-6 text-slate-900 dark:text-white sm:px-6">
+      <div className="mx-auto flex max-w-4xl flex-col gap-4 pb-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-xs uppercase tracking-[0.4em] text-slate-500 dark:text-slate-400">
+            Timeline
+          </p>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Trade Shows</h1>
+        </div>
+        <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2 py-1 text-xs text-slate-500 dark:bg-white/10 dark:text-slate-300 sm:text-sm">
+          <span>Region</span>
+          <div className="flex gap-1 rounded-full bg-white/10 p-1 dark:bg-white/20">
+            {['All', ...REGION_OPTIONS].map((region) => (
+              <button
+                key={region}
+                onClick={() => handleRegionChange(region)}
+                className={`rounded-full px-3 py-1 font-semibold ${
+                  selectedRegion === region || (!selectedRegion && region === 'All')
+                    ? 'bg-primary text-white shadow'
+                    : 'text-slate-300 hover:bg-white/20 dark:text-white'
+                }`}
+              >
+                {region}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
       <div className="mx-auto max-w-4xl">
         <div className="absolute left-6 top-12 bottom-12 hidden w-px bg-slate-200 dark:bg-slate-800 lg:block" />
 

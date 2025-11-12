@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { Vendor, Show, Safe } from '@/lib/types';
+import { getVendorGoogleUrl } from '@/lib/utils/google';
 
 interface VendorDetailViewProps {
   vendor: Vendor;
@@ -50,6 +51,23 @@ export default function VendorDetailView({
             ? `Based in ${vendor.city}, ${vendor.state}`
             : vendor.address || 'Location TBD'}
         </p>
+        <div className="flex gap-2 pt-4 flex-wrap">
+          <a
+            href={getVendorGoogleUrl({
+              placeId: vendor.place_id,
+              name: vendor.name,
+              address: vendor.address,
+              city: vendor.city,
+              state: vendor.state,
+            })}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex h-9 items-center gap-2 rounded-full border border-white/20 px-4 text-sm font-semibold text-primary hover:bg-primary/10 dark:text-white dark:hover:bg-white/10"
+          >
+            <span className="material-symbols-outlined text-base">pin_drop</span>
+            View in Google Maps
+          </a>
+        </div>
         <div className="flex gap-2 pt-4 flex-wrap">
           <div className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary/10 dark:bg-primary/20 px-3">
             <p className="text-sm font-medium leading-normal text-primary">
@@ -173,4 +191,3 @@ export default function VendorDetailView({
     </main>
   );
 }
-
