@@ -23,10 +23,15 @@ export default async function TimelinePage({
 
   const shows = await getShowsWithVendors();
 
-  const filteredShows =
+  const filteredShows = (
     normalizedRegion !== 'All'
       ? shows.filter((show) => stateToRegion(show.state) === normalizedRegion)
-      : shows;
+      : shows
+  ).sort((a, b) => {
+    const aDate = a.start_date ? new Date(a.start_date).getTime() : Number.MAX_SAFE_INTEGER;
+    const bDate = b.start_date ? new Date(b.start_date).getTime() : Number.MAX_SAFE_INTEGER;
+    return aDate - bDate;
+  });
 
   // Calculate gaps between shows
   const showsWithGaps = filteredShows.map((show, index) => {
