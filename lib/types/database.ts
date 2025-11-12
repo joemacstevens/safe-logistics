@@ -13,6 +13,7 @@ export type Show = {
   longitude: number | null;
   created_at: string | null;
   geocode_confidence: number | null;
+  notes: string | null;
 };
 
 export type Vendor = {
@@ -107,4 +108,3 @@ export type SafeWithDetails = Safe & {
   show?: Show;
   movements?: SafeMovement[];
 };
-

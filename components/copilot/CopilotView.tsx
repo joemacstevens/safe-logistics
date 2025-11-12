@@ -13,6 +13,7 @@ export default function CopilotView() {
       api: '/api/copilot/chat',
     }),
   });
+  const isGenerating = status === 'submitted' || status === 'streaming';
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -110,7 +111,7 @@ export default function CopilotView() {
                 </div>
               );
             })}
-            {isLoading && (
+            {isGenerating && (
               <div className="flex gap-3">
                 <div className="flex size-10 items-center justify-center rounded-full bg-primary/20 text-primary">
                   <span className="material-symbols-outlined text-xl">smart_toy</span>
@@ -136,11 +137,11 @@ export default function CopilotView() {
                 onChange={(event) => setInput(event.target.value)}
                 placeholder="✨ Ask about shows, vendors, or safes…"
                 className="flex-1 bg-transparent text-sm text-white placeholder:text-slate-500 focus:outline-none"
-                disabled={status === 'in-flight'}
+                disabled={isGenerating}
               />
               <button
                 type="submit"
-                disabled={!input.trim() || status === 'in-flight'}
+                disabled={!input.trim() || isGenerating}
                 className="flex size-12 items-center justify-center rounded-xl bg-primary text-white shadow-[0_10px_25px_rgba(19,126,236,0.5)] transition hover:bg-primary/90 disabled:opacity-50"
               >
                 <span className="material-symbols-outlined">send</span>

@@ -47,6 +47,101 @@ export default function ShowDetailView({
 }: ShowDetailViewProps) {
   const router = useRouter();
   const [notesExpanded, setNotesExpanded] = useState(true);
+  const [editOpen, setEditOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    show_name: show.show_name || '',
+    venue_name: show.venue_name || '',
+    start_date: show.start_date || '',
+    end_date: show.end_date || '',
+    notes: show.notes || '',
+  });
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const openEditModal = () => {
+    setFormData({
+      show_name: show.show_name || '',
+      venue_name: show.venue_name || '',
+      start_date: show.start_date || '',
+      end_date: show.end_date || '',
+      notes: show.notes || '',
+    });
+    setErrorMessage(null);
+    setEditOpen(true);
+  };
+
+  const handleFieldChange = (field: keyof typeof formData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSaveChanges = async () => {
+    try {
+      setSaving(true);
+      setErrorMessage(null);
+      const payload = {
+        showId: show.id,
+        show_name: formData.show_name.trim() || show.show_name,
+        venue_name: formData.venue_name || null,
+        start_date: formData.start_date || null,
+        end_date: formData.end_date || null,
+        notes: formData.notes || null,
+      };
+
+      const response = await fetch('/api/show/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || 'Failed to update show');
+      }
+
+      setEditOpen(false);
+      router.refresh();
+    } catch (error) {
+      console.error('Failed to update show:', error);
+      setErrorMessage(
+        error instanceof Error ? error.message : 'Failed to update show'
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteShow = async () => {
+    if (deleting) return;
+    const confirmed = confirm(
+      'Delete this show and all of its assignments? This cannot be undone.'
+    );
+    if (!confirmed) return;
+
+    try {
+      setDeleting(true);
+      setErrorMessage(null);
+      const response = await fetch('/api/show/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ showId: show.id }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || 'Failed to delete show');
+      }
+
+      router.push('/timeline');
+    } catch (error) {
+      console.error('Failed to delete show:', error);
+      setErrorMessage(
+        error instanceof Error ? error.message : 'Failed to delete show'
+      );
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark text-[#212529] dark:text-gray-200 overflow-hidden">
@@ -84,6 +179,30 @@ export default function ShowDetailView({
                 {formatDateRange(show.start_date, show.end_date)}
               </p>
             </div>
+          </div>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            <Link
+              href={`/assign-vendor/${show.id}`}
+              className="flex h-12 items-center justify-center gap-2 rounded-xl bg-primary text-white text-sm font-semibold shadow-[0_8px_20px_rgba(19,126,236,0.25)] transition hover:bg-primary/90"
+            >
+              <span className="material-symbols-outlined text-base">local_shipping</span>
+              Assign Vendor
+            </Link>
+            <Link
+              href={`/assign-safes/${show.id}`}
+              className="flex h-12 items-center justify-center gap-2 rounded-xl border border-primary/40 bg-primary/5 text-sm font-semibold text-primary transition hover:bg-primary/10"
+            >
+              <span className="material-symbols-outlined text-base">inventory_2</span>
+              Assign Safes
+            </Link>
+            <button
+              onClick={openEditModal}
+              className="flex h-12 items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 text-sm font-semibold text-gray-700 transition hover:bg-white/10 dark:text-gray-200"
+            >
+              <span className="material-symbols-outlined text-base">edit</span>
+              Edit Details
+            </button>
           </div>
         </div>
 
@@ -166,39 +285,6 @@ export default function ShowDetailView({
             </div>
           </div>
 
-          {/* Actions Section */}
-          <div className="bg-white dark:bg-white/5 rounded-xl shadow-sm">
-            <div className="p-4">
-              <h3 className="text-lg font-bold leading-tight tracking-[-0.015em] pb-2 text-gray-900 dark:text-white">
-                Actions
-              </h3>
-              <div className="flex flex-col gap-3">
-                <button
-                  onClick={() => {
-                    // TODO: Implement edit show functionality
-                    console.log('Edit show', show.id);
-                  }}
-                  className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary/20 text-primary text-base font-bold leading-normal transition-colors hover:bg-primary/30"
-                >
-                  <span className="material-symbols-outlined">edit</span>
-                  <span>Edit Details</span>
-                </button>
-                <button
-                  onClick={() => {
-                    // TODO: Implement delete show functionality
-                    if (confirm('Are you sure you want to delete this show?')) {
-                      console.log('Delete show', show.id);
-                    }
-                  }}
-                  className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-red-500/20 text-red-500 dark:bg-red-500/20 dark:text-red-400 text-base font-bold leading-normal transition-colors hover:bg-red-500/30 dark:hover:bg-red-500/30"
-                >
-                  <span className="material-symbols-outlined">delete</span>
-                  <span>Delete Show</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
           {/* Notes Section */}
           <div className="bg-white dark:bg-white/5 rounded-xl shadow-sm">
             <div className="p-4">
@@ -224,20 +310,118 @@ export default function ShowDetailView({
           </div>
         </div>
       </div>
+      {/* Edit modal */}
+      {editOpen && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 px-4 py-8">
+          <div className="w-full max-w-lg rounded-3xl border border-white/15 bg-white px-5 py-6 shadow-2xl dark:bg-[#0f1a2a]">
+            <div className="flex items-center justify-between pb-4">
+              <div>
+                <p className="text-xs uppercase tracking-[0.4em] text-slate-400">
+                  Quick Edit
+                </p>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {show.show_name}
+                </h3>
+              </div>
+              <button
+                onClick={() => setEditOpen(false)}
+                className="flex size-10 items-center justify-center rounded-full bg-white/10 text-slate-500 hover:bg-white/20 dark:text-slate-200"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
 
-      {/* Bottom Action Button */}
-      <div className="fixed bottom-0 left-0 right-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm p-4 border-t border-gray-200 dark:border-gray-800 shrink-0">
-        <div className="flex flex-col gap-3">
-          <Link
-            href={`/assign-vendor/${show.id}`}
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-white text-base font-bold leading-normal transition-colors hover:bg-primary/90"
-          >
-            <span className="material-symbols-outlined">assignment_turned_in</span>
-            <span>Assign to Vendor</span>
-          </Link>
+            {errorMessage && (
+              <p className="mb-4 rounded-xl bg-red-500/10 px-3 py-2 text-sm text-red-600 dark:text-red-300">
+                {errorMessage}
+              </p>
+            )}
+
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Show Name
+                </label>
+                <input
+                  type="text"
+                  value={formData.show_name}
+                  onChange={(event) => handleFieldChange('show_name', event.target.value)}
+                  className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-gray-900 focus:border-primary focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-white"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Venue
+                </label>
+                <input
+                  type="text"
+                  value={formData.venue_name}
+                  onChange={(event) => handleFieldChange('venue_name', event.target.value)}
+                  className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-gray-900 focus:border-primary focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-white"
+                />
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    Start Date
+                  </label>
+                  <input
+                    type="date"
+                    value={formData.start_date ?? ''}
+                    onChange={(event) => handleFieldChange('start_date', event.target.value)}
+                    className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-gray-900 focus:border-primary focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    End Date
+                  </label>
+                  <input
+                    type="date"
+                    value={formData.end_date ?? ''}
+                    onChange={(event) => handleFieldChange('end_date', event.target.value)}
+                    className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-gray-900 focus:border-primary focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-white"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Notes
+                </label>
+                <textarea
+                  value={formData.notes}
+                  onChange={(event) => handleFieldChange('notes', event.target.value)}
+                  rows={3}
+                  className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-gray-900 focus:border-primary focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-white"
+                />
+              </div>
+            </div>
+
+            <div className="mt-6 flex flex-col gap-3">
+              <button
+                onClick={handleSaveChanges}
+                disabled={saving}
+                className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-white text-base font-bold leading-normal transition hover:bg-primary/90 disabled:opacity-50"
+              >
+                {saving ? 'Saving...' : 'Save Changes'}
+              </button>
+              <button
+                onClick={() => setEditOpen(false)}
+                className="flex h-11 w-full items-center justify-center rounded-xl border border-white/20 text-sm font-semibold text-gray-600 hover:bg-white/10 dark:text-gray-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteShow}
+                disabled={deleting}
+                className="flex h-11 w-full items-center justify-center rounded-xl bg-red-500/15 text-sm font-semibold text-red-500 transition hover:bg-red-500/25 disabled:opacity-50 dark:text-red-300"
+              >
+                {deleting ? 'Deleting…' : 'Delete Show'}
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
-

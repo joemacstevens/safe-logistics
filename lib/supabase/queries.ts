@@ -314,3 +314,30 @@ export async function updateSafe(
   if (error) throw error;
   return data;
 }
+
+// Shows - mutations
+export async function updateShow(
+  id: number,
+  updates: Partial<Show>
+): Promise<Show> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('shows')
+    .update({
+      ...updates,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteShow(id: number): Promise<void> {
+  const supabase = await createClient();
+  const { error } = await supabase.from('shows').delete().eq('id', id);
+
+  if (error) throw error;
+}

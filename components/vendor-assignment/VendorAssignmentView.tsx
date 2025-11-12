@@ -201,6 +201,16 @@ export default function VendorAssignmentView({
     show.venue_address ||
     'Location TBD';
 
+  const selectedVendorEntry = selectedVendor
+    ? sortedAndFilteredVendors.find(
+        (entry) => entry.vendor.iid === selectedVendor
+      )
+    : undefined;
+  const selectedVendorDistance = selectedVendorEntry
+    ? formatDistance(selectedVendorEntry.distance ?? null)
+    : null;
+  const hasSelection = Boolean(selectedVendor);
+
   return (
     <div className="flex h-screen w-full flex-col bg-background-light dark:bg-background-dark text-[#212529] dark:text-gray-200">
       {/* Header / Hero */}
@@ -276,7 +286,11 @@ export default function VendorAssignmentView({
 
       {/* Map view */}
       {viewMode === 'map' && (
-        <main className="flex-1 overflow-y-auto">
+        <main
+          className={`flex-1 overflow-y-auto ${
+            hasSelection ? 'pb-32' : ''
+          }`}
+        >
           <div className="relative h-[60vh]">
             <div className="absolute inset-0 flex items-center justify-center rounded-b-3xl border-b border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
               Interactive map coming soon
@@ -335,7 +349,11 @@ export default function VendorAssignmentView({
 
       {/* List view */}
       {viewMode === 'list' && (
-        <main className="flex-1 space-y-4 overflow-y-auto bg-background-light dark:bg-background-dark px-4 pb-24 pt-4">
+        <main
+          className={`flex-1 space-y-4 overflow-y-auto bg-background-light dark:bg-background-dark px-4 pt-4 ${
+            hasSelection ? 'pb-32' : 'pb-24'
+          }`}
+        >
           {displayedVendors.map(({ vendor, distance }) => {
             const isSelected = selectedVendor === vendor.iid;
             const dist = formatDistance(distance);
@@ -409,28 +427,40 @@ export default function VendorAssignmentView({
         </main>
       )}
 
-      {/* Footer - Fixed above bottom nav */}
-      <footer className="fixed bottom-16 left-0 right-0 z-20 border-t border-gray-200 dark:border-gray-800 bg-background-light/95 dark:bg-background-dark/95 px-4 py-4 backdrop-blur-sm lg:bottom-0 lg:relative lg:z-auto">
-        <div className="flex gap-4">
-          <button
-            onClick={() => router.back()}
-            className="flex flex-1 items-center justify-center rounded-xl border border-gray-300 dark:border-gray-700 px-5 py-3 text-base font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/5"
-          >
-            Cancel
-          </button>
+      <footer
+        className={`fixed bottom-0 left-0 right-0 z-30 border-t border-gray-200 bg-white/95 px-4 py-4 transition-all duration-300 ease-out backdrop-blur dark:border-gray-800 dark:bg-[#050e1a]/95 ${
+          hasSelection
+            ? 'translate-y-0 opacity-100'
+            : 'pointer-events-none translate-y-full opacity-0'
+        }`}
+      >
+        <div className="mx-auto flex w-full max-w-3xl items-center justify-between gap-4">
+          <div className="flex flex-col text-sm text-gray-600 dark:text-gray-300">
+            <span className="text-base font-semibold text-gray-900 dark:text-white">
+              {selectedVendorEntry?.vendor.name || 'Select a vendor'}
+            </span>
+            <span>
+              {selectedVendorDistance
+                ? `${selectedVendorDistance.miles} miles • ${
+                    selectedVendorDistance.hours
+                      ? `${selectedVendorDistance.hours}h `
+                      : ''
+                  }${selectedVendorDistance.remainingMinutes}m`
+                : hasSelection
+                ? 'Distance pending'
+                : 'Choose a vendor to continue'}
+            </span>
+          </div>
           <button
             onClick={handleAssignVendor}
-            disabled={!selectedVendor || loading}
-            className="flex flex-1 items-center justify-center rounded-xl bg-primary px-5 py-3 text-base font-semibold text-white shadow-[0_10px_30px_rgba(19,126,236,0.35)] transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={!hasSelection || loading}
+            className="flex h-12 flex-1 items-center justify-center rounded-xl bg-primary px-6 text-base font-semibold text-white shadow-[0_10px_30px_rgba(19,126,236,0.35)] transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading
               ? 'Assigning...'
-              : selectedVendor
-              ? `Assign ${
-                  sortedAndFilteredVendors.find((entry) => entry.vendor.iid === selectedVendor)
-                    ?.vendor.name ?? 'Vendor'
-                }`
-              : 'Select a Vendor'}
+              : hasSelection
+              ? `Assign ${selectedVendorEntry?.vendor.name || 'Vendor'}`
+              : 'Assign Vendor'}
           </button>
         </div>
       </footer>
