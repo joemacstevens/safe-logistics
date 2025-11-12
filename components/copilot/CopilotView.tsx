@@ -8,7 +8,7 @@ import { DefaultChatTransport } from 'ai';
 export default function CopilotView() {
   const router = useRouter();
   const [input, setInput] = useState('');
-  const { messages, sendMessage, isLoading } = useChat({
+  const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({
       api: '/api/copilot/chat',
     }),
@@ -136,11 +136,11 @@ export default function CopilotView() {
                 onChange={(event) => setInput(event.target.value)}
                 placeholder="✨ Ask about shows, vendors, or safes…"
                 className="flex-1 bg-transparent text-sm text-white placeholder:text-slate-500 focus:outline-none"
-                disabled={isLoading}
+                disabled={status === 'in-flight'}
               />
               <button
                 type="submit"
-                disabled={!input.trim() || isLoading}
+                disabled={!input.trim() || status === 'in-flight'}
                 className="flex size-12 items-center justify-center rounded-xl bg-primary text-white shadow-[0_10px_25px_rgba(19,126,236,0.5)] transition hover:bg-primary/90 disabled:opacity-50"
               >
                 <span className="material-symbols-outlined">send</span>

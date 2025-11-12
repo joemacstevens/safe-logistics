@@ -17,8 +17,11 @@ export async function POST(request: NextRequest) {
       vendor_id,
       show_id,
       distance_miles,
-      travel_time_minutes: travel_time_minutes || null,
-      route_summary: route_summary || null,
+      travel_time_minutes: travel_time_minutes ?? null,
+      travel_time_minutes_est: null,
+      drive_estimate_miles: null,
+      route_summary: route_summary ?? null,
+      notes: null,
     });
 
     return NextResponse.json(distance);
@@ -30,4 +33,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

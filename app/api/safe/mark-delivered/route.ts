@@ -45,7 +45,12 @@ export async function POST(request: NextRequest) {
         to_vendor_id: null,
         movement_status: 'delivered',
         movement_date: new Date().toISOString(),
+        estimated_arrival: null,
         actual_arrival: new Date().toISOString(),
+        distance_miles: null,
+        travel_time_minutes: null,
+        transport_vendor: safe.vendor_id || null,
+        notes: 'Marked as delivered via Copilot',
       });
     }
 
@@ -58,4 +63,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
