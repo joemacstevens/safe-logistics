@@ -1,9 +1,12 @@
 import { getShowsWithVendors } from '@/lib/supabase/queries';
 import TimelineView from '@/components/timeline/TimelineView';
 import { haversineDistanceWithTime } from '@/lib/utils/distance';
-import { REGION_OPTIONS, stateToRegion } from '@/lib/utils/regions';
+import { REGION_OPTIONS, stateToRegion, type Region } from '@/lib/utils/regions';
 
 type RegionFilter = (typeof REGION_OPTIONS)[number] | 'All';
+
+const isRegion = (value: unknown): value is Region =>
+  typeof value === 'string' && REGION_OPTIONS.some((region) => region === value);
 
 export default async function TimelinePage({
   searchParams,
@@ -15,10 +18,8 @@ export default async function TimelinePage({
   const selectedRegion = Array.isArray(regionParam)
     ? regionParam[0]
     : regionParam;
-  const normalizedRegion: RegionFilter = REGION_OPTIONS.includes(
-    selectedRegion as RegionFilter
-  )
-    ? (selectedRegion as RegionFilter)
+  const normalizedRegion: RegionFilter = isRegion(selectedRegion)
+    ? selectedRegion
     : 'All';
 
   const shows = await getShowsWithVendors();
@@ -35,7 +36,7 @@ export default async function TimelinePage({
 
   // Calculate gaps between shows
   const showsWithGaps = filteredShows.map((show, index) => {
-    if (index === shows.length - 1) {
+    if (index === filteredShows.length - 1) {
       return {
         ...show,
         distance_gap: undefined,
@@ -44,7 +45,7 @@ export default async function TimelinePage({
       };
     }
 
-    const nextShow = shows[index + 1];
+    const nextShow = filteredShows[index + 1];
     if (!show.start_date || !nextShow.start_date) {
       return {
         ...show,
