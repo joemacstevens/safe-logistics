@@ -2,6 +2,10 @@ import { openai } from '@ai-sdk/openai';
 import { streamText, embed } from 'ai';
 import { createClient } from '@/lib/supabase/server';
 
+type MatchItem = {
+  content: string;
+};
+
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
@@ -45,8 +49,10 @@ export async function POST(req: Request) {
       return new Response('Error matching items', { status: 500 });
     }
 
-    const context = similarItems
-      .map((item: any) => `- ${item.content}`)
+    const typedSimilarItems: MatchItem[] = (similarItems ?? []) as MatchItem[];
+
+    const context = typedSimilarItems
+      .map((item) => `- ${item.content}`)
       .join('\n');
 
     const systemPrompt = `You are SafeLogistics Copilot, an AI assistant helping logistics coordinators manage trade show safe storage and transport.
