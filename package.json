@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "generate-embeddings": "tsx lib/scripts/generate-embeddings.ts"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.65",
@@ -14,6 +15,7 @@
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.81.1",
     "ai": "^5.0.92",
+    "dotenv": "^17.2.3",
     "next": "16.0.1",
     "react": "19.2.0",
     "react-dom": "19.2.0"
@@ -26,6 +28,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
     "tailwindcss": "^4",
+    "tsx": "^4.20.6",
     "typescript": "^5"
   }
 }

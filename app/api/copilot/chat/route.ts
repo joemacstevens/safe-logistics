@@ -1,7 +1,6 @@
 import { openai } from '@ai-sdk/openai';
-import { streamText } from 'ai';
+import { streamText, embed } from 'ai';
 import { createClient } from '@/lib/supabase/server';
-import { getShows, getVendors, getSafes, getAssignments } from '@/lib/supabase/queries';
 
 export const maxDuration = 30;
 
@@ -9,7 +8,6 @@ export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
 
-    // Get current user
     const supabase = await createClient();
     const {
       data: { user },
@@ -19,46 +17,47 @@ export async function POST(req: Request) {
       return new Response('Unauthorized', { status: 401 });
     }
 
-    // Fetch current data for context
-    const [shows, vendors, safes, assignments] = await Promise.all([
-      getShows(),
-      getVendors(),
-      getSafes(),
-      getAssignments(),
-    ]);
+    // Get the last message from the user
+    const lastUserMessage = messages[messages.length - 1]?.content;
 
-    // Build context string
-    const context = `
-Current SafeLogistics Data:
-- Shows: ${shows.length} total shows
-- Vendors: ${vendors.length} total vendors
-- Safes: ${safes.length} total safes
-- Assignments: ${assignments.length} active assignments
+    if (!lastUserMessage) {
+      return new Response('Missing last message', { status: 400 });
+    }
 
-Recent shows: ${shows.slice(0, 5).map((s) => `${s.show_name} (${s.start_date})`).join(', ')}
+    // Generate an embedding for the user's message
+    const { embedding } = await embed({
+      model: openai.embedding('text-embedding-3-small'),
+      value: lastUserMessage,
+    });
 
-Available vendors: ${vendors.slice(0, 5).map((v) => v.name).join(', ')}
-`;
+    // Query the database for similar items
+    const { data: similarItems, error: matchError } = await supabase.rpc(
+      'match_items',
+      {
+        query_embedding: embedding,
+        match_threshold: 0.75,
+        match_count: 5,
+      }
+    );
+
+    if (matchError) {
+      console.error('Error matching items:', matchError);
+      return new Response('Error matching items', { status: 500 });
+    }
+
+    const context = similarItems
+      .map((item: any) => `- ${item.content}`)
+      .join('\n');
 
     const systemPrompt = `You are SafeLogistics Copilot, an AI assistant helping logistics coordinators manage trade show safe storage and transport.
 
-Your capabilities:
-- Answer questions about shows, vendors, safes, and assignments
-- Suggest route optimizations
-- Help assign vendors to shows based on distance and capacity
-- Track safe locations and movements
-- Provide insights about scheduling and logistics
+You are an expert in this system and have access to real-time data.
+When answering, you MUST use the information provided in the "Relevant Context" section.
+Do not make up information. If the context does not provide the answer, say "I could not find that information in the database."
 
-Important rules:
-- Only use data provided in the context - never hallucinate vendor names, show names, or distances
-- If you don't have information, say so clearly
-- Be concise and actionable
-- For route optimization suggestions, explain the reasoning
-
-Current context:
-${context}
-
-When users ask about specific shows, vendors, or safes, use the provided context. If the information isn't in the context, tell them you need to check the database.`;
+Relevant Context:
+${context || 'No relevant information found in the database for this query.'}
+`;
 
     const result = await streamText({
       model: openai('gpt-4o-mini'),
@@ -67,7 +66,7 @@ When users ask about specific shows, vendors, or safes, use the provided context
         role: msg.role as 'user' | 'assistant' | 'system',
         content: msg.content,
       })),
-      temperature: 0.7,
+      temperature: 0.2,
     });
 
     return result.toTextStreamResponse();
