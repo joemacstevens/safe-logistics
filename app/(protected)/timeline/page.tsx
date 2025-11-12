@@ -15,10 +15,21 @@ export default async function TimelinePage({
   const selectedRegion = Array.isArray(regionParam)
     ? regionParam[0]
     : regionParam;
+  const normalizedRegion: RegionFilter = REGION_OPTIONS.includes(
+    selectedRegion as RegionFilter
+  )
+    ? (selectedRegion as RegionFilter)
+    : 'All';
+
   const shows = await getShowsWithVendors();
 
+  const filteredShows =
+    normalizedRegion !== 'All'
+      ? shows.filter((show) => stateToRegion(show.state) === normalizedRegion)
+      : shows;
+
   // Calculate gaps between shows
-  const showsWithGaps = shows.map((show, index) => {
+  const showsWithGaps = filteredShows.map((show, index) => {
     if (index === shows.length - 1) {
       return {
         ...show,
@@ -73,23 +84,9 @@ export default async function TimelinePage({
     };
   });
 
-  const normalizedRegion: RegionFilter = REGION_OPTIONS.includes(
-    selectedRegion as RegionFilter
-  )
-    ? (selectedRegion as RegionFilter)
-    : 'All';
-
-  const regionFilteredShows =
-    normalizedRegion !== 'All'
-      ? showsWithGaps.filter((show) => {
-          const region = stateToRegion(show.state);
-          return region === normalizedRegion;
-        })
-      : showsWithGaps;
-
   return (
     <TimelineView
-      shows={regionFilteredShows}
+      shows={showsWithGaps}
       selectedRegion={normalizedRegion}
     />
   );
