@@ -265,7 +265,7 @@ export default function TimelineView({ shows, selectedRegion }: TimelineViewProp
                           backgroundColor: vendorColor,
                         }}
                       />
-                      <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                      <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">
                         {[
                           show.time_gap !== undefined
                             ? `🕒 ${show.time_gap} day${show.time_gap !== 1 ? 's' : ''} later`
