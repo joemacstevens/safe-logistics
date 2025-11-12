@@ -17,10 +17,12 @@ export default async function VendorsPage({
 
   const vendors = await getVendorsWithMetrics();
 
-  const normalizedRegion: RegionFilter = REGION_OPTIONS.includes(
-    selectedRegion as RegionFilter
-  )
-    ? (selectedRegion as RegionFilter)
+  const isRegion = (value: unknown): value is (typeof REGION_OPTIONS)[number] =>
+    typeof value === 'string' &&
+    (REGION_OPTIONS as readonly string[]).includes(value);
+
+  const normalizedRegion: RegionFilter = isRegion(selectedRegion)
+    ? selectedRegion
     : 'All';
 
   const filteredVendors =
