@@ -24,7 +24,6 @@ export default function MainLayout({
   const navItems = [
     { href: '/timeline', label: 'Timeline', icon: 'event' },
     { href: '/safes', label: 'Safes', icon: 'inventory_2' },
-    { href: '/vendors', label: 'Vendors', icon: 'local_shipping' },
   ];
 
   return (
@@ -40,11 +39,8 @@ export default function MainLayout({
         <h1 className="text-xl font-bold leading-tight tracking-[-0.015em] text-slate-900 dark:text-white flex-1 text-center">
           {pathname === '/timeline' && 'Timeline View'}
           {pathname === '/safes' && 'Safes'}
-          {pathname === '/vendors' && 'Vendors'}
           {pathname?.startsWith('/show/') && 'Show Details'}
           {pathname?.startsWith('/safe/') && 'Safe Details'}
-          {pathname?.startsWith('/vendor/') && 'Vendor Details'}
-          {pathname?.startsWith('/assign-vendor/') && 'Assign Vendor'}
         </h1>
         <div className="flex items-center justify-end w-10">
           {pathname === '/timeline' && (
@@ -144,4 +140,3 @@ export default function MainLayout({
     </div>
   );
 }
-

@@ -3,13 +3,11 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import type { Show, Vendor, Safe } from '@/lib/types';
+import type { Show, Safe } from '@/lib/types';
 
 interface ShowDetailViewProps {
   show: Show;
-  vendor: Vendor | null;
   safes: Safe[];
-  assignmentId?: number;
 }
 
 function formatDateRange(startDate: string | null, endDate: string | null): string {
@@ -41,9 +39,7 @@ function getStatusLabel(status: string | null): string {
 
 export default function ShowDetailView({
   show,
-  vendor,
   safes,
-  assignmentId,
 }: ShowDetailViewProps) {
   const router = useRouter();
   const [notesExpanded, setNotesExpanded] = useState(true);
@@ -181,14 +177,7 @@ export default function ShowDetailView({
             </div>
           </div>
 
-          <div className="mt-4 grid gap-3 sm:grid-cols-3">
-            <Link
-              href={`/assign-vendor/${show.id}`}
-              className="flex h-12 items-center justify-center gap-2 rounded-xl bg-primary text-white text-sm font-semibold shadow-[0_8px_20px_rgba(19,126,236,0.25)] transition hover:bg-primary/90"
-            >
-              <span className="material-symbols-outlined text-base">local_shipping</span>
-              Assign Vendor
-            </Link>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <Link
               href={`/assign-safes/${show.id}`}
               className="flex h-12 items-center justify-center gap-2 rounded-xl border border-primary/40 bg-primary/5 text-sm font-semibold text-primary transition hover:bg-primary/10"
@@ -208,47 +197,6 @@ export default function ShowDetailView({
 
         {/* Sections */}
         <div className="p-4 flex flex-col gap-4">
-          {/* Vendor Section */}
-          <div className="bg-white dark:bg-white/5 rounded-xl shadow-sm">
-            <div className="p-4">
-              <h3 className="text-lg font-bold leading-tight tracking-[-0.015em] pb-2 text-gray-900 dark:text-white">
-                Vendor
-              </h3>
-              {vendor ? (
-                <Link
-                  href={`/vendor/${vendor.iid}`}
-                  className="flex items-center gap-4"
-                >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20">
-                    <span className="material-symbols-outlined text-primary">local_shipping</span>
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-bold text-gray-900 dark:text-white">{vendor.name}</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {vendor.city && vendor.state
-                        ? `Based in ${vendor.city}, ${vendor.state}`
-                        : vendor.address
-                        ? `Based in ${vendor.address}`
-                        : 'Location TBD'}
-                    </p>
-                  </div>
-                  <span className="material-symbols-outlined text-gray-400 dark:text-gray-500">
-                    chevron_right
-                  </span>
-                </Link>
-              ) : (
-                <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-100 dark:bg-white/5">
-                    <span className="material-symbols-outlined text-gray-400">local_shipping</span>
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-bold text-gray-600 dark:text-gray-400">No vendor assigned</p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
           {/* Assigned Safes Section */}
           <div className="bg-white dark:bg-white/5 rounded-xl shadow-sm">
             <div className="p-4">

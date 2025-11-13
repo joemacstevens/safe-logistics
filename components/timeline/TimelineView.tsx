@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { ShowWithVendor } from '@/lib/types';
 import DropdownMenu from '@/components/ui/DropdownMenu';
-import { REGION_OPTIONS } from '@/lib/utils/regions';
+import { REGION_OPTIONS, stateToRegion } from '@/lib/utils/regions';
+import type { Region } from '@/lib/utils/regions';
 
 interface TimelineViewProps {
   shows: (ShowWithVendor & {
@@ -15,26 +16,27 @@ interface TimelineViewProps {
   selectedRegion?: string | null;
 }
 
-function getVendorColor(vendorId?: string): string {
-  const fallback = '#64748b';
-  if (!vendorId) return fallback;
+const DEFAULT_TIMELINE_COLOR = '#64748b';
 
-  const palette = [
-    '#14b8a6',
-    '#a855f7',
-    '#f97316',
-    '#3b82f6',
-    '#ec4899',
-    '#22c55e',
-    '#f59e0b',
-    '#6366f1',
-  ];
+const REGION_COLORS: Record<Region, string> = {
+  Northeast: '#6366f1',
+  Midwest: '#0ea5e9',
+  South: '#f97316',
+  West: '#22c55e',
+};
 
-  let hash = 0;
-  for (let i = 0; i < vendorId.length; i++) {
-    hash = vendorId.charCodeAt(i) + ((hash << 5) - hash);
+function getTimelineColor(show: ShowWithVendor): string {
+  const hasSafesAssigned = !!(show.safes && show.safes.length > 0);
+  if (!hasSafesAssigned) {
+    return DEFAULT_TIMELINE_COLOR;
   }
-  return palette[Math.abs(hash) % palette.length];
+
+  const region = stateToRegion(show.state);
+  if (!region) {
+    return DEFAULT_TIMELINE_COLOR;
+  }
+
+  return REGION_COLORS[region];
 }
 
 function hexToRgb(hex: string) {
@@ -123,7 +125,7 @@ export default function TimelineView({ shows, selectedRegion }: TimelineViewProp
 
         <div className="space-y-8">
           {shows.map((show, index) => {
-            const vendorColor = getVendorColor(show.vendor?.iid);
+            const timelineColor = getTimelineColor(show);
             const nextShow = shows[index + 1];
             const hasGap =
               nextShow &&
@@ -139,7 +141,10 @@ export default function TimelineView({ shows, selectedRegion }: TimelineViewProp
                     <div className="z-10 flex h-12 w-12 items-center justify-center rounded-full bg-background-light dark:bg-background-dark">
                       <div
                         className="flex h-8 w-8 items-center justify-center rounded-full shadow-inner"
-                        style={{ backgroundColor: withAlpha(vendorColor, 0.2), color: vendorColor }}
+                        style={{
+                          backgroundColor: withAlpha(timelineColor, 0.2),
+                          color: timelineColor,
+                        }}
                       >
                         <span className="material-symbols-outlined text-lg">event</span>
                       </div>
@@ -148,8 +153,8 @@ export default function TimelineView({ shows, selectedRegion }: TimelineViewProp
                       <div
                         className="h-full w-[6px] rounded-full"
                         style={{
-                          backgroundColor: vendorColor,
-                          boxShadow: `0 0 18px ${withAlpha(vendorColor, 0.45)}`,
+                          backgroundColor: timelineColor,
+                          boxShadow: `0 0 18px ${withAlpha(timelineColor, 0.45)}`,
                         }}
                       />
                     )}
@@ -173,23 +178,6 @@ export default function TimelineView({ shows, selectedRegion }: TimelineViewProp
                           {show.venue_name && ` • ${show.venue_name}`}
                         </p>
                         <div className="flex flex-wrap gap-2 pt-2">
-                          {show.vendor ? (
-                            <span
-                              className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold"
-                              style={{
-                                backgroundColor: withAlpha(vendorColor, 0.15),
-                                color: vendorColor,
-                              }}
-                            >
-                              <span className="material-symbols-outlined text-sm">local_shipping</span>
-                              {show.vendor.name}
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-slate-200 dark:bg-slate-700 px-3 py-1 text-xs font-semibold text-slate-600 dark:text-slate-300">
-                              <span className="material-symbols-outlined text-sm">pending</span>
-                              Not Assigned
-                            </span>
-                          )}
                           {show.safes && show.safes.length > 0 ? (
                             <span className="inline-flex items-center gap-1 rounded-full bg-slate-200 dark:bg-slate-700 px-3 py-1 text-xs font-semibold text-slate-600 dark:text-slate-300">
                               <span className="material-symbols-outlined text-sm">inventory_2</span>
@@ -206,11 +194,6 @@ export default function TimelineView({ shows, selectedRegion }: TimelineViewProp
                       <DropdownMenu
                         trigger={<span className="material-symbols-outlined text-xl">more_vert</span>}
                         items={[
-                          {
-                            label: 'Assign Vendor',
-                            icon: 'local_shipping',
-                            onClick: () => router.push(`/assign-vendor/${show.id}`),
-                          },
                           {
                             label: 'Assign Safes',
                             icon: 'inventory_2',
@@ -253,8 +236,8 @@ export default function TimelineView({ shows, selectedRegion }: TimelineViewProp
                       <div
                         className="h-full w-[6px] rounded-full"
                         style={{
-                          backgroundColor: vendorColor,
-                          boxShadow: `0 0 18px ${withAlpha(vendorColor, 0.45)}`,
+                          backgroundColor: timelineColor,
+                          boxShadow: `0 0 18px ${withAlpha(timelineColor, 0.45)}`,
                         }}
                       />
                     </div>
@@ -262,7 +245,7 @@ export default function TimelineView({ shows, selectedRegion }: TimelineViewProp
                       <div
                         className="h-2 w-2 shrink-0 rounded-full"
                         style={{
-                          backgroundColor: vendorColor,
+                          backgroundColor: timelineColor,
                         }}
                       />
                       <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">
